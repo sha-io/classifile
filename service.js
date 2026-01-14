@@ -167,6 +167,7 @@ async function main(options = { startup: false, interval: 1000, createCategories
     const runtime = async () => {
         try {
             const directory = await getDirectoryFiles()
+            if (options.createCategories) createCategoryFolders();
             directory.get("files").forEach(async (file) => await categoriseFile(file))
             directory.get("folders").forEach(async (folder) => await categoriseFile(folder))
         }
