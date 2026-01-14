@@ -97,7 +97,7 @@ function retry(fn, maxRetries = 5) {
     return backoff;
 }
 
-async function categoriseFile(file, retry = 5) {
+async function categoriseFile(file, maxRetries = 5) {
     const fileExtension = path.extname(file).toLowerCase();
     // skip whitelisted files and folders
     if (whitelist.includes(file)) return;
@@ -136,7 +136,7 @@ async function categoriseFile(file, retry = 5) {
     for (const category in categories) {
         if (categories[category].includes(fileExtension)) {
             const categoryPath = path.join(root, category);
-            return await retry(() => moveToCategory(category, categoryPath), retry)()
+            return await retry(() => moveToCategory(category, categoryPath), maxRetries)();
         }
     }
 
@@ -144,7 +144,7 @@ async function categoriseFile(file, retry = 5) {
     const categoryPath = path.join(root, "others");
     const destination = destinationFilePath(categoryPath);
 
-    return await retry(() => moveToCategory("others", destination), retry)();
+    return await retry(() => moveToCategory("others", destination), maxRetries)();
 }
 
 function createWatcher(options) {
